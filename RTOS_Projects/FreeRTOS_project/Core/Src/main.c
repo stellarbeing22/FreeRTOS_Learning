@@ -94,10 +94,19 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_NVIC_SetPriorityGrouping( NVIC_PRIORITYGROUP_4 );
 
-  status = xTaskCreate(Task1_Handler, "Task_1", 512, NULL, 2, &Handle_1);
+  //set CYCCNT counter
+#define DWT_CTRL (*(volatile uint32_t *)0xE0001000)
+
+  	  DWT_CTRL |= (1<<0);
+
+  	  SEGGER_SYSVIEW_Conf();
+
+  	  SEGGER_SYSVIEW_Start();
+
+  status = xTaskCreate(Task1_Handler, "Task_1", 128, NULL, 2, &Handle_1);
   configASSERT(status == pdPASS);
 
-  status = xTaskCreate(Task2_Handler, "Task_2", 512, NULL, 2, &Handle_2);
+  status = xTaskCreate(Task2_Handler, "Task_2", 128, NULL, 2, &Handle_2);
   configASSERT(status == pdPASS);
 
   (void)status;
@@ -213,10 +222,9 @@ static void Task1_Handler(void *parameters)
 	{
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_0);
 		vTaskDelay(pdMS_TO_TICKS(1000));
-		taskYIELD(); //if configUSE_PREEMPTION is 0 meaning scheduler is cooperative mode, we give up the cpu ourselved after completion
+		//taskYIELD(); //if configUSE_PREEMPTION is 0 meaning scheduler is cooperative mode, we give up the CPU ourselves after completion
 
 	}
-
 }
 
 static void Task2_Handler(void *parameters)
@@ -225,7 +233,7 @@ static void Task2_Handler(void *parameters)
 	{
 		HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_1);
 		vTaskDelay(pdMS_TO_TICKS(2000));
-		taskYIELD();
+		//taskYIELD();
 	}
 }
 
