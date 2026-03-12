@@ -1,0 +1,16 @@
+# STM32CubeIDE metadata
+RTOS_Projects/.metadata/
+RTOS_Projects/FreeRTOS_project/Debug/
+RTOS_Projects/FreeRTOS_project/.settings/
+
+# Build artifacts
+*.o
+*.d
+*.su
+*.cyclo
+*.elf
+*.map
+*.list
+
+# ZIP files
+*.zip
